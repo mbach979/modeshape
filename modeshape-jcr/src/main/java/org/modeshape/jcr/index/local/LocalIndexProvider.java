@@ -180,8 +180,10 @@ public class LocalIndexProvider extends IndexProvider {
         logger().debug("Shutting down the local index provider '{0}' in repository '{1}'", getName(), getRepositoryName());
         if (db != null) {
             try {
-                db.commit();
-                db.close();
+                if (!db.isClosed()) {
+                    db.commit();
+                    db.close();
+                }
             } finally {
                 db = null;
             }
